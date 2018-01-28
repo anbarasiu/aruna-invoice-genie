@@ -1,28 +1,29 @@
 import { getState, updateState } from 'redux-jetpack'
+import server from '../constants'
 import 'isomorphic-fetch'
 
 export async function get() {
-  console.log('Find Match -> ')
-  const res = await fetch(`http://localhost:9000/api/customer/match`)
+  console.log('Get Customers -> ')
+  const res = await fetch(`${server()}/api/customer`)
   if (res.status === 200)
     res.json().then(
       resData => {
-        updateState('customerMatches', customerMatches => resData.customerMatches)
-        updateState('refinedCustomerMatches', refinedCustomerMatches => resData.customerMatches)
+        updateState('customers', customers => resData.customers)
+        updateState('customerMatches', customerMatches => resData.customers)
       }
     )
   else console.log('No data found')
 }
 
-export function refineMatches(partname) {
-  console.log('Refine Customer Match -> ', partname)
-  const customerMatches = getState(state => state.customerMatches)
+export function findMatches(partname) {
+  console.log('Find Customer Match -> ', partname)
+  const customers = getState(state => state.customers)
   const matchRegex = new RegExp(partname, 'i')
-  const refinedCustomerMatches = customerMatches.filter(customer => (matchRegex).test(customer.cname))
-  console.log('Refined Customer Matches -> ', refinedCustomerMatches)
-  updateState('refinedCustomerMatches', state => refinedCustomerMatches)
+  const customerMatches = customers.filter(customer => (matchRegex).test(customer.cname))
+  console.log('Customer Matches -> ', customerMatches)
+  updateState('customerMatches', state => customerMatches)
 }
 
-export function clearRefinedMatches() {
-  updateState('refinedCustomerMatches', refinedCustomerMatches => null)
+export function clearMatches() {
+  updateState('customerMatches', customerMatches => null)
 }

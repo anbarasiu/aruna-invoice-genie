@@ -1,3 +1,40 @@
+/* Navigation Bar */
+
+.navBar {
+  display: flex;
+  background: black;
+  color: white;
+  font-size: 20px;
+  line-height: 52px;
+}
+
+.navBar div {
+  flex: 1;
+  display: flex;
+}
+
+.links {
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.navBar a {
+  text-decoration: none;
+  padding: 10px;
+}
+
+.navBar a:visited {
+  color: crimson;
+}
+
+@media print {
+  .navBar {
+    display: none;
+  }
+}
+
+/* Navigation Bar */
+
 /* Invoice Display*/
 body {
   margin: 0;
@@ -11,59 +48,151 @@ body {
 }
 
 h2 {
-  text-align: center;
   background: black;
-  margin: 0 0 24px 0;
-  padding: 0 12px;
+  padding: 0 15px;
   text-align: left;
-  color: white;
+  color: lime;
   font-size: 20px;
-  line-height: 52px;
 }
 
-.createInvoice {
+#sname {
+  font-size: 22px;
+  margin: 5px;
+}
+
+#createInvoiceButton {
+  filter: grayscale(100%);
+}
+
+#addRowButton {
   float: right;
+  filter: grayscale(100%);
   margin: 8px;
+}
+
+#createInvoiceButton:focus,
+#createInvoiceButton:hover,
+#createInvoiceButton:active,
+#addRowButton:focus,
+#addRowButton:hover,
+#addRowButton:active {
+  filter: none;
 }
 
 .invoiceHeader {
   display: flex;
-  flex-direction: row;
-  margin: 8px;
-  font-weight: bold;
+  justify-content: space-between;
+  margin: 10px;
 }
 
-.invoiceHeader div {
-  flex: 1;
-}
-
-.invoiceDetails {
-  text-align: right;
+#sname {
+  font-size: 22px;
+  font-weight: 600;
 }
 
 .addressBlock {
   text-align: left;
 }
 
+#invoiceProductsContainer {
+  padding: 10px;
+}
+
 .productList {
-  border-radius: 5px;
-  margin: 8px;
-  border: solid 1px gray;
-  background: #f3f3f3;
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.productList div {
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  padding: 1px;
+#productListHeader {
+  background-color: #ddd;
 }
 
-.productListHeaders {
-  border-bottom: 1px solid black;
+#productListHeader th {
+  border: 2px solid #cfcfcf;
+  line-height: 200%;
+  text-align: center;
+  padding: 5px;
 }
 
-.productListRow {
+.productListRow td {
+  padding: 5px;
+  border: solid #cfcfcf;
+  border-width: 0 2px 0 2px;
+}
+
+.pr-product {
+  width: 34%;
+}
+
+.pr-quantity,
+.pr-tax {
+  text-align: center;
+  width: 8%;
+}
+
+.pr-mrp,
+.pr-price,
+.pr-bprice,
+.pr-cgst,
+.pr-sgst,
+.pr-amount {
+  text-align: right;
+  width: 8%;
+}
+
+.pr-igst {
+  text-align: right;
+  width: 16%;
+}
+
+.invoiceTotalRow td {
+  background-color: #ddd;
+  padding: 5px;
+  border: 2px solid #cfcfcf;
+}
+
+.empty-34 {
+  width: 34%;
+  font-weight: 600;
+}
+
+.empty-8,
+.summary-bprice,
+.summary-cgst,
+.summary-sgst,
+.summary-total {
+  text-align: right;
+  width: 8%;
+}
+
+.summary-igst {
+  width: 16%;
+  text-align: right;
+}
+
+.summary-totalInWords {
+  padding: 5px;
+  margin: 5px;
+}
+
+#disclaimer {
+  font-size: 10px;
+  font-weight: 100;
+  text-align: center;
+}
+
+#printButton {
+  padding: 5px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
+@media print {
+  h2,
+  #printButton {
+    display: none;
+  }
 }
 
 /* Invoice Display */
@@ -77,7 +206,7 @@ h2 {
   background: #f3f3f3;
 }
 
-input[type=text] {
+input[type="text"] {
   border: solid 1px gray;
   border-radius: 5px;
   background-color: white;
@@ -87,23 +216,24 @@ input[type=text] {
   font-size: 14px;
 }
 
-input[type=button]  {
+input[type="button"],
+.btn {
   height: 36px;
-  -webkit-appearance: none;
   font-size: 14px;
   font-weight: bold;
   color: white;
   background: #00539f;
 }
 
-input[type=checkbox] {
+input[type="checkbox"] {
   display: none;
 }
 
-input[type=checkbox] + label {
+input[type="checkbox"] + label {
   background-color: #fafafa;
   border: 1px solid #cacece;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
+    inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
   padding: 12px;
   border-radius: 3px;
   display: inline-block;
@@ -111,21 +241,31 @@ input[type=checkbox] + label {
   vertical-align: middle;
 }
 
-input[type=checkbox]:checked + label {
+input[type="checkbox"]:checked + label {
   background-color: #e9ecee;
   border: 1px solid #adb8c0;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05),
+    inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05),
+    inset 15px 10px -12px rgba(255, 255, 255, 0.1);
   color: #99a1a7;
 }
 
-input[type=checkbox]:checked + label:after {
-  content: '\2714';
+input[type="checkbox"]:checked + label:after {
+  content: "\2714";
   font-size: 20px;
   left: 2px;
   position: absolute;
   top: 0px;
   left: 3px;
   color: #00539f;
+}
+
+.invoiceTopToolbelt {
+  display: flex;
+}
+
+.invoiceTopToolbelt div {
+  flex: 1;
 }
 
 .igst {
@@ -154,7 +294,7 @@ input[type=checkbox]:checked + label:after {
   display: flex;
 }
 
-.customerAddress .nameId input{
+.customerAddress .nameId input {
   flex: 1;
 }
 
@@ -162,7 +302,7 @@ input[type=checkbox]:checked + label:after {
   display: flex;
 }
 
-.customerAddress .address input{
+.customerAddress .address input {
   flex: 1;
 }
 
@@ -187,7 +327,7 @@ input[type=checkbox]:checked + label:after {
   margin: 4px 8px;
 }
 
-.inputRow input{
+.inputRow > * {
   flex: 1;
   flex-direction: row;
 }
@@ -208,3 +348,167 @@ input[type=checkbox]:checked + label:after {
 }
 
 /* Invoice Create */
+
+/* Modal */
+
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+  z-index: 1;
+}
+
+#modal {
+  position: fixed;
+  top: 20%;
+  left: 30%;
+  width: 40%;
+  height: 20%;
+  padding: 5px;
+  background: white;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* Modal */
+
+/* Manage Product */
+
+.productInputHeaders {
+  display: flex;
+  padding: 8px;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  background: #00539f;
+  color: white;
+}
+
+.headerAddButton {
+  flex: 7;
+}
+
+.headerTitles {
+  flex: 16;
+  display: flex;
+  flex-direction: row;
+}
+
+.headerTitles div {
+  flex: 1;
+}
+
+.productInputRow {
+  display: flex;
+  margin: 4px 8px;
+}
+
+.productInputRow > * {
+  flex: 1;
+  flex-direction: row;
+}
+
+.productInputRow #addNewButton {
+  flex: 2;
+}
+
+/* Manage Product */
+
+/* Report */
+
+#reportContainer {
+  margin: 15px;
+}
+
+#reportTable {
+  margin: 15px;
+  border: 1px solid #ddd;
+}
+
+#reportTableHeader {
+  display: flex;
+  background-color: #ddd;
+}
+
+#reportTableHeader div {
+  border: 1px solid #cfcfcf;
+  line-height: 200%;
+  flex: 1;
+  text-align: center;
+  padding: 5px;
+}
+
+#reportDataRow {
+  display: flex;
+  align-items: center;
+}
+
+#reportRow-date,
+#reportRow-invoice,
+#reportRow-cgstId {
+  text-align: center;
+  border: 1px solid #ddd;
+  padding: 5px;
+  flex: 4;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#reportRow-money {
+  flex: 26;
+}
+
+#reportMoneyRow {
+  display: flex;
+}
+
+#reportMoneyRow div {
+  flex: 1;
+  text-align: right;
+  border: 1px solid #ddd;
+  padding: 5px;
+}
+
+#reportRow-gstRate {
+  text-align: center !important;
+}
+
+
+.reportTableSummary {
+  display: flex;
+  background-color: #ddd;
+}
+
+.reportTableSummary div {
+  border: 1px solid #cfcfcf;
+  line-height: 200%;
+  flex: 1;
+  text-align: right;
+  padding: 5px;
+}
+
+.reportTableSummary > .noBorder {
+  border: 0;
+  margin: 1px;
+  font-weight: 600;
+  text-align: left;
+}
+
+@media print {
+  #reportToolbelt, #reportRow-delete {
+    display: none;
+  }
+}
+
+/* Report */

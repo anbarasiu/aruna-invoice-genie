@@ -5,6 +5,12 @@ export function checkbox(input) {
   updateState('input', input => ({ ...input, [name]: !input[name] }))
 }
 
+export function date(input) {
+  console.log('Date Tracked -> ', input.target.value)
+  const date = input.target.value
+  updateState('input', input => ({ ...input, date }))
+}
+
 export function textbox(input, row) {
   const name = input.target.name
   const value = input.target.value

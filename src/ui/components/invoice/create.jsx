@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router";
 import { connect } from "redux-jetpack";
-import * as trackInput from "../../actions/input-track";
+import Modal from "../modal";
+import * as trackInput from "../../actions/invoice-input";
 import * as invoice from "../../actions/invoice";
 import * as product from "../../actions/product";
 import * as customer from "../../actions/customer";
+import * as modal from "../../actions/modal";
 
 class Create extends Component {
   constructor() {
@@ -21,7 +23,7 @@ class Create extends Component {
     return function(e) {
       trackInput.setActive(row);
       if (pid) trackInput.newProduct(row);
-      if (e.target.value.length > 2) product.refineMatches(e.target.value);
+      if (e.target.value.length > 2) product.findMatches(e.target.value);
       trackInput.textbox(e, row);
     };
   }
@@ -30,7 +32,7 @@ class Create extends Component {
     return function(e) {
       if (cid) trackInput.newCustomer();
       if (e.target.value.length === 2) customer.get();
-      if (e.target.value.length > 2) customer.refineMatches(e.target.value);
+      if (e.target.value.length > 2) customer.findMatches(e.target.value);
       trackInput.customerData(e);
     };
   }
@@ -45,16 +47,38 @@ class Create extends Component {
   selectProduct(row, match) {
     trackInput.setProduct(row, match);
     this.quantityInput.focus();
-    product.clearRefinedMatches();
+    product.clearMatches();
   }
 
   selectCustomer(row, match) {
     trackInput.setCustomer(row, match);
-    customer.clearRefinedMatches();
+    customer.clearMatches();
   }
 
   createInvoice() {
-    const status = invoice.create(this.props.input);
+    console.log("Check against null constraints");
+    const invalidData = this.props.input.rows.reduce((out, row) => {
+      console.log("Row data -> ", row);
+      return row.name === ""
+        ? out
+        : row.mrp === undefined ||
+          row.mrp === "" ||
+          row.quantity === undefined ||
+          row.quantity === "" ||
+          row.price === undefined ||
+          row.price === "" ||
+          row.gst === undefined ||
+          row.gst === ""
+          ? out.concat(row.name)
+          : out;
+    }, []);
+    console.log("Invalid Data -> ", invalidData);
+
+    return invalidData.length > 0
+      ? modal.open(`Check if all fields of the product
+      ${invalidData.join(", ")}
+      are filled.`)
+      : invoice.create(this.props.input);
   }
 
   handleKeyUp(e) {
@@ -63,47 +87,49 @@ class Create extends Component {
       if (this.props.highlightProductMatch !== null) {
         this.selectProduct(
           this.props.currentActive,
-          this.props.refinedProductMatches[this.props.highlightProductMatch]
+          this.props.productMatches[this.props.highlightProductMatch]
         );
         trackInput.clearProductHighlight();
       } else trackInput.addRow();
     }
     if (e.keyCode === 40)
-      trackInput.highlightProductMatch(
-        "+",
-        this.props.refinedProductMatches.length
-      );
+      trackInput.highlightProductMatch("+", this.props.productMatches.length);
     if (e.keyCode === 38)
-      trackInput.highlightProductMatch(
-        "-",
-        this.props.refinedProductMatches.length
-      );
+      trackInput.highlightProductMatch("-", this.props.productMatches.length);
   }
 
   render() {
     return (
       <div className="createContainer">
-        <h2>
-          Aruna Invoice Genie
-          <input
-            type="button"
-            name="submit"
-            className="createInvoice"
-            value="Create Invoice"
-            onClick={this.createInvoice}
-          />
-        </h2>
-        <div className="igst">
-          <span>IGST</span>
-          <input
-            id="igst"
-            type="checkbox"
-            value="IGST"
-            placeholder="Product"
-            checked={this.props.input.igst}
-            onChange={trackInput.checkbox}
-          />
-          <label htmlFor="igst" />
+        <div className="invoiceTopToolbelt">
+          <div className="igst">
+            <span>IGST</span>
+            <input
+              id="igst"
+              type="checkbox"
+              value="IGST"
+              placeholder="Product"
+              checked={this.props.input.igst}
+              onChange={trackInput.checkbox}
+            />
+            <label htmlFor="igst" />
+          </div>
+          <div>
+            <input
+              type="date"
+              value={this.props.input.date}
+              onChange={trackInput.date}
+            />
+          </div>
+          <div>
+            <input
+              type="button"
+              value="Add Item +"
+              id="addRowButton"
+              name="addRow"
+              onClick={trackInput.addRow}
+            />
+          </div>
         </div>
         <div className="customerAddress">
           <div className="nameId">
@@ -132,8 +158,8 @@ class Create extends Component {
             />
           </div>
           <div>
-            {this.props.refinedCustomerMatches &&
-              this.props.refinedCustomerMatches.map(match => (
+            {this.props.customerMatches &&
+              this.props.customerMatches.map(match => (
                 <div
                   className="matchRow"
                   onClick={() => trackInput.setCustomer(match)}
@@ -199,7 +225,9 @@ class Create extends Component {
                   name="quantity"
                   data-row={row}
                   placeholder="Quantity"
-                  ref={input => { this.quantityInput = input; }}
+                  ref={input => {
+                    this.quantityInput = input;
+                  }}
                   value={this.props.input.rows[row].quantity}
                   onChange={this.trackInput(row, "textbox")}
                   onKeyUp={this.handleKeyUp}
@@ -218,9 +246,9 @@ class Create extends Component {
                 />
               </div>
               <div>
-                {this.props.refinedProductMatches &&
+                {this.props.productMatches &&
                   this.props.currentActive == row &&
-                  this.props.refinedProductMatches.map((match, matchIndex) => (
+                  this.props.productMatches.map((match, matchIndex) => (
                     <div
                       className={
                         this.props.highlightProductMatch === matchIndex
@@ -245,14 +273,21 @@ class Create extends Component {
           <div>
             <input
               type="button"
-              value="Add Item +"
-              className="addRow"
-              name="addRow"
-              onClick={trackInput.addRow}
+              name="submit"
+              id="createInvoiceButton"
+              value="Create Invoice"
+              onClick={this.createInvoice}
             />
           </div>
         </div>
         {this.props.redirect && <Redirect to={this.props.redirect} />}
+        {this.props.modal.active && (
+          <Modal
+            message={this.props.modal.message}
+            okCallback={modal.close}
+            cancelCallback={modal.close}
+          />
+        )}
       </div>
     );
   }

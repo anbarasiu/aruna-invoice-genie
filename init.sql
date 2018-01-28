@@ -17,7 +17,8 @@ CREATE TABLE product(
   name TEXT NOT NULL,
   mrp FLOAT NOT NULL,
   price FLOAT NOT NULL,
-  gst INT NOT NULL
+  gst INT NOT NULL,
+  active BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE invoice(
@@ -33,5 +34,6 @@ CREATE TABLE invoiceproduct(
   invoiceid INT NOT NULL REFERENCES invoice(iid),
   productid INT NOT NULL REFERENCES product(pid),
   price FLOAT NOT NULL,
-  quantity INT NOT NULL
+  quantity INT NOT NULL,
+  usedgst INT NOT NULL
 );

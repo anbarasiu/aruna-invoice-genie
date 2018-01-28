@@ -4,8 +4,8 @@ const connection = {
   host: 'localhost',
   port: 5432,
   database: 'aruna',
-  user: 'aruna',
-  password: 'aruna'
+  user: 'anbu',
+  password: 'pswd'
 }
 
 const db = pgPromise()(process.env.DATABASE_URL || connection)

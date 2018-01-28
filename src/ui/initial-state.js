@@ -1,12 +1,17 @@
-export default {
+  export default {
   redirect: null,
   highlightProductMatch: null,
+  products: [],
   productMatches: [],
-  refinedProductMatches: [],
+  customers: [],
   customerMatches: [],
-  refinedCustomerMatches: [],
   currentActive: "",
+  modal: {
+    active: false,
+    message: ""
+  },
   input: {
+    date: "",
     igst: false,
     customer: {
       cid: "",
@@ -25,5 +30,24 @@ export default {
       }
     ]
   },
-  invoice: {}
+  invoice: {},
+  productManage: {
+    update: {
+      row: null
+    },
+    insert: {},
+    remove: {
+      id: null,
+      name: null
+    },
+    activeModal: ""
+  },
+  report: {
+    from: "",
+    to: "",
+    out: {
+      rows: [],
+      total: 0
+    }
+  }
 };

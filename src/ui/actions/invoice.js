@@ -1,4 +1,5 @@
 import { updateState } from 'redux-jetpack'
+import server from '../constants'
 import 'isomorphic-fetch'
 
 export async function create(data) {
@@ -14,7 +15,7 @@ export async function create(data) {
       method: 'POST',
       body: JSON.stringify(data)
   }
-  const res = await fetch(`http://localhost:9000/api/invoice/create`, options)
+  const res = await fetch(`${server()}/api/invoice/create`, options)
   console.log('Create Invoice Action Result -> ', res)
   res.status === 200
     ? res.json().then(
@@ -25,7 +26,7 @@ export async function create(data) {
 
 export async function display(id) {
   console.log('Display invoice ', id)
-  const res = await fetch(`http://aruna.herokuapp.com/api/invoice/${id}`)
+  const res = await fetch(`${server()}/api/invoice/${id}`)
   console.log('Display Invoice Action Result -> ', res)
   let resData
   if (res.status === 200) {
@@ -33,4 +34,13 @@ export async function display(id) {
     console.log('Invoice Response Data -> ', resData)
     updateState('invoice', invoice => resData)
   } else console.log('No data found')
+}
+
+export async function remove(id) {
+  console.log('Delete invoice ', id)
+  const res = await fetch(`${server()}/api/invoice/delete/${id}`)
+  console.log('Delete Invoice Action Result -> ', res)
+  if (res.status === 200) {
+    updateState('invoice', invoice => resData)
+  } else console.log('Record not found')
 }
