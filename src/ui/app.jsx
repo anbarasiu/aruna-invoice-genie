@@ -14,6 +14,7 @@ export default store => () =>
           <div>
             <NavBar />
             <Switch>
+              <Route exact path="/invoice/edit/:id" component={Create} />
               <Route exact path="/invoice/create" component={Create} />
               <Route exact path="/invoice/:id" component={Display} />
               <Route exact path="/product" component={Product} />

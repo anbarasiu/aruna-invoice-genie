@@ -36,6 +36,18 @@ export async function display(id) {
   } else console.log('No data found')
 }
 
+export async function edit(id) {
+  console.log('Edit invoice ', id)
+  const res = await fetch(`${server()}/api/invoice/${id}`)
+  console.log('Display Invoice Action Result -> ', res)
+  let resData
+  if (res.status === 200) {
+    resData = await res.json()
+    console.log('Invoice Response Data -> ', resData)
+    updateState('invoice', invoice => resData)
+  } else console.log('No data found')
+}
+
 export async function remove(id) {
   console.log('Delete invoice ', id)
   const res = await fetch(`${server()}/api/invoice/delete/${id}`)

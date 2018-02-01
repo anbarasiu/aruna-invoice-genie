@@ -16,6 +16,7 @@ class Create extends Component {
   }
 
   componentWillMount() {
+    if (this.props.match.params.id) invoice.edit(this.props.match.params.id);
     product.get();
   }
 
