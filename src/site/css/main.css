@@ -454,19 +454,24 @@ input[type="checkbox"]:checked + label:after {
 
 #reportRow-date,
 #reportRow-invoice,
-#reportRow-cgstId {
+#reportRow-cgstId, 
+#reportRow-money {
   text-align: center;
   border: 1px solid #ddd;
-  padding: 5px;
-  flex: 4;
+  flex: 1;
   align-self: stretch;
-  display: flex;
   align-items: center;
   justify-content: center;
 }
 
+#reportRow-date,
+#reportRow-invoice,
+#reportRow-cgstId {
+  padding: 5px 0;
+}
+
 #reportRow-money {
-  flex: 26;
+  flex: 6;
 }
 
 #reportMoneyRow {
@@ -474,10 +479,11 @@ input[type="checkbox"]:checked + label:after {
 }
 
 #reportMoneyRow div {
+  display: flex;
   flex: 1;
-  text-align: right;
-  border: 1px solid #ddd;
-  padding: 5px;
+  border-right: solid 1px lightgray;
+  padding: 5px 0;
+  justify-content: center;
 }
 
 #reportRow-gstRate {
